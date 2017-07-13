@@ -10,8 +10,6 @@
 <head>
     <title>User</title>
 <body>
-${user.name}
-${a}
-${b}
+${path}
 </body>
 </html>

@@ -7,6 +7,7 @@
         <result column="age" jdbcType="INTEGER" property="age"/>
         <result column="school" jdbcType="INTEGER" property="school"/>
     </resultMap>
+
     <sql id="Base_Column_List">
         id, name, age, school
     </sql>
@@ -85,6 +86,7 @@
         SELECT
         <include refid="Base_Column_List"/>
         FROM user
+        ORDER BY id DESC
         limit #{offset,jdbcType=INTEGER},#{limit,jdbcType=INTEGER}
     </select>
 
@@ -92,4 +94,40 @@
         SELECT count(1)
         FROM user
     </select>
+
+    <insert id="insertList" parameterType="java.util.List">
+        INSERT INTO user (name,age,school) VALUES
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.name},
+            #{item.age},
+            #{item.school})
+        </foreach>
+    </insert>
+
+    <update id="editList" parameterType="java.util.List">
+        <foreach collection="list" item="item" index="index" separator=";">
+            UPDATE user
+            <set>
+                <if test="item.name != null">
+                    name = #{item.name},
+                </if>
+                <if test="item.age != null">
+                    age = #{item.age},
+                </if>
+                <if test="item.school != null">
+                    school = #{item.school},
+                </if>
+            </set>
+            WHERE id=#{item.id}
+        </foreach>
+    </update>
+
+    <delete id="delList" parameterType="java.util.List">
+        DELETE FROM user
+        WHERE id IN
+        <foreach collection="list" item="item" index="index" open="(" separator="," close=")">
+            #{item}
+        </foreach>
+    </delete>
+
 </mapper>

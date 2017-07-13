@@ -30,32 +30,42 @@
                 <input type="button" value="删除" onclick="del(${item.id})"/></td>
         </tr>
     </c:forEach>
-    <a href="?page=${prePage}">上一页</a>
-    <a href="?page=${nextPage}">下一页</a>
-    <form:form action="save" method="post">
-        <table>
-            <tr>
-                <td><form:label path="name">Name</form:label></td>
-                <td><form:input path="name"/><form:hidden path="id"/></td>
-            </tr>
-            <tr>
-                <td><form:label path="age">Age</form:label></td>
-                <td><form:input path="age"/></td>
-            </tr>
-            <tr>
-                <td><form:label path="school">School</form:label></td>
-                <td><form:select path="school">
-                    <c:forEach items="${school}" var="item">
-                        <form:option value="${item.id}">${item.school}</form:option>
-                    </c:forEach>
-                </form:select></td>
-            </tr>
-            <tr>
-                <td><input type="submit" value="提交"/></td>
-            </tr>
-        </table>
-    </form:form>
 </table>
+<div>
+    <a href="?page=${prePage}">上一页</a>
+
+    <a href="?page=${nextPage}">下一页</a>
+</div>
+
+<form:form action="save" method="post">
+    <table>
+        <tr>
+            <td><form:label path="name">Name</form:label></td>
+            <td><form:input path="name"/><form:hidden path="id"/></td>
+        </tr>
+        <tr>
+            <td><form:label path="age">Age</form:label></td>
+            <td><form:input path="age"/></td>
+        </tr>
+        <tr>
+            <td><form:label path="school">School</form:label></td>
+            <td><form:select path="school">
+                <c:forEach items="${school}" var="item">
+                    <form:option value="${item.id}">${item.school}</form:option>
+                </c:forEach>
+            </form:select></td>
+        </tr>
+        <tr>
+            <td><input type="submit" value="提交"/></td>
+        </tr>
+    </table>
+</form:form>
+<div>
+    <input type="button" value="批量添加" onclick="addList()">
+    <input type="button" value="批量修改" onclick="editList()">
+    <input type="text" value="44,45" id="delInput">
+    <input type="button" value="批量删除" onclick="delList()">
+</div>
 <script src="<c:url value="/resources/js/jquery-3.2.1.min.js" />"></script>
 <script>
     function edit(id, name, age, school) {
@@ -73,6 +83,50 @@
             dataType: "text",
             data: {"id": id},
             success: function (result) {
+                window.location.reload();
+            },
+            error: function (result) {
+                console.info("error");
+                alert(result);
+            }
+        })
+    }
+    function addList() {
+        $.ajax({
+            url: "addList",
+            type: "POST",
+            dataType: "text",
+            success: function (result) {
+                window.location.reload();
+            },
+            error: function (result) {
+                console.info("error");
+                alert(result);
+            }
+        })
+    }
+    function editList() {
+        $.ajax({
+            url: "editList",
+            type: "POST",
+            dataType: "text",
+            success: function (result) {
+                window.location.reload();
+            },
+            error: function (result) {
+                console.info("error");
+                alert(result);
+            }
+        })
+    }
+    function delList() {
+        $.ajax({
+            url: "delList",
+            type: "POST",
+            dataType: "text",
+            data:{"id":$("#delInput").val()},
+            success: function (result) {
+                //console.info(result);
                 window.location.reload();
             },
             error: function (result) {
